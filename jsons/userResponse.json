@@ -1,0 +1,5 @@
+{
+  "message": "User successfully registered.",
+  "data": "$user",
+  "success" : true
+}
