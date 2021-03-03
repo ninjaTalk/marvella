@@ -1,5 +1,7 @@
 {
-  "message": "User successfully registered.",
+  "success": true,
+  "message": "Successfully login",
   "data": "$user",
-  "success" : true
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC92MVwvbG9naW4iLCJpYXQiOjE2MTQ3ODA2MDcsImV4cCI6MTYxNDc4NDIwNywibmJmIjoxNjE0NzgwNjA3LCJqdGkiOiJDYVZydWJjb3owYWY2UEJQIiwic3ViIjoxLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.vtCZTV4ysx_ol-m3UdQNj_iRmgH1ruNK0qfV4RiBLKY",
+  "code": 200
 }
