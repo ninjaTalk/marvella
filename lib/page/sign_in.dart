@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:marvella/page/home.dart';
 import 'package:marvella/page/sign_up.dart';
 import 'package:marvella/services/base_view.dart';
+import 'package:marvella/services/view_state.dart';
 import 'package:marvella/view_model/user_view_model.dart';
 import '../services/helper.dart';
 
@@ -29,7 +30,7 @@ class _SignIn extends State<SignIn>{
   Widget build(BuildContext context) {
     return BaseView<UserViewModel>(
       onModelReady: (model){
-
+        model.context = context;
       },
       builder: (context, model, child)=> WillPopScope(
         onWillPop:  onClick ?()async=>false : Helper.of(context).onWillPop,
@@ -63,9 +64,9 @@ class _SignIn extends State<SignIn>{
                     SizedBox(height: 32,),
                     inputInfo(hint: "Password", type: 1),
                     SizedBox(height: 32,),
-                    Padding(
+                    model.state == ViewState.Busy ? Center(child: CircularProgressIndicator(backgroundColor: Colors.green,)) : Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: loginBtn(),
+                      child: loginBtn(model),
                     ),
                     SizedBox(height: 32,),
                     notHaveAccount(),
@@ -117,7 +118,7 @@ class _SignIn extends State<SignIn>{
         obscureText: type == 1 ? onHide : false,
         decoration: InputDecoration(
           hintText: "$hint",
-          suffix: GestureDetector(
+          suffixIcon: GestureDetector(
             onTap: (){
               if(type == 1){
                 setState(() {
@@ -136,26 +137,13 @@ class _SignIn extends State<SignIn>{
     );
   }
 
-  Widget loginBtn(){
+  Widget loginBtn(UserViewModel model){
     return FlatButton(
       onPressed: (){
-        if(!onClick){
-          setState(() {
-            onClick = false;
-          });
-         print(email);
-         if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email??"")){
-           Fluttertoast.showToast(msg: "Mohon Memasukkan Email yang Valid");
-           setState(() {
-             onClick = false;
-           });
-         }else{
-
-           Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
-           setState(() {
-             onClick = false;
-           });
-         }
+        if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email??"")){
+          Fluttertoast.showToast(msg: "Mohon Memasukkan Email yang Valid");
+        }else{
+          model.login(email, password);
         }
       },
       child: Helper().simpleText(color: Color(0xFF2D76D5), txt: "LOGIN", fontweight: FontWeight.w700,fontSize: 16.0),

@@ -1,23 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'userResponse.dart';
+part of 'logoutResponse.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserResponse _$UserResponseFromJson(Map<String, dynamic> json) {
-  return UserResponse()
+LogoutResponse _$LogoutResponseFromJson(Map<String, dynamic> json) {
+  return LogoutResponse()
     ..success = json['success'] as bool
     ..message = json['message'] as String
-    ..data = json['data'] == null
-        ? null
-        : User.fromJson(json['data'] as Map<String, dynamic>)
-    ..token = json['token'] as String
+    ..data = json['data']
+    ..token = json['token']
     ..code = json['code'] as int;
 }
 
-Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
+Map<String, dynamic> _$LogoutResponseToJson(LogoutResponse instance) =>
     <String, dynamic>{
       'success': instance.success,
       'message': instance.message,

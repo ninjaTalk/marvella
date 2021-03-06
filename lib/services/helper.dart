@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../repository/user_repository.dart' as user;
 
 class Helper{
 
@@ -15,6 +16,13 @@ class Helper{
 
 
   Helper({this.context});
+
+  static getHeader(){
+    Map<String, String> header = {
+      "Authorization" : "Bearer ${user.token.value}"
+    };
+    return header;
+  }
 
 
   Widget simpleText({txt : "", fontSize : 14.0, fontweight : FontWeight.normal, color : Colors.black, align : TextAlign.left}){

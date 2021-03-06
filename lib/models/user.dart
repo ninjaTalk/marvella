@@ -7,16 +7,15 @@ part 'user.g.dart';
 class User {
       User();
 
+  int id;
   String nama;
-  @JsonKey(name: 'no_telp') String noTelp;
   String jk;
   String alamat;
+  @JsonKey(name: 'no_telp') String noTelp;
   String email;
-  @JsonKey(name: 'status_user') int statusUser;
-  int role;
-  @JsonKey(name: 'updated_at') String updatedAt;
-  @JsonKey(name: 'created_at') String createdAt;
-  int id;
+  String role;
+  @JsonKey(name: 'status_user') String statusUser;
+  @JsonKey(name: 'device_id') String deviceId;
 
   factory User.fromJson(Map<String,dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);

@@ -1,0 +1,1 @@
+enum optionGender {Pria, Wanita}

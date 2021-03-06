@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:marvella/services/view_state.dart';
 
 class BaseViewModel extends ValueNotifier{
-  BaseViewModel(value) : super(value);
+  BaseViewModel({value}) : super({value});
 
   ///set state
   ViewState _state = ViewState.Idle;

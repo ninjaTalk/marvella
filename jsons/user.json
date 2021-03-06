@@ -1,12 +1,11 @@
 {
-  "nama": "Raden",
-  "no_telp": "08123456789",
+  "id": 1,
+  "nama": "Admin",
   "jk": "Laki-laki",
-  "alamat": "Jl. Tukad Batanghari V A No 20, Panjer, Denpasar Selatan, Denpasar, Bali",
-  "email": "raden@gmail.com",
-  "status_user": 1,
-  "role": 2,
-  "updated_at": "2021-03-01T14:13:48.000000Z",
-  "created_at": "2021-03-01T14:13:48.000000Z",
-  "id": 2
+  "alamat": "Denpasar",
+  "no_telp": "081222333444",
+  "email": "admin@marvella.test",
+  "role": "admin",
+  "status_user": "Aktif",
+  "device_id": "92dd2b54-f753-4751-b006-2b9170a18af7"
 }

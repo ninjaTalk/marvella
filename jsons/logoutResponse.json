@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "message": "User successfully signed out",
+  "data": null,
+  "token": null,
+  "code": 200
+}

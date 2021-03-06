@@ -7,9 +7,11 @@ part 'userResponse.g.dart';
 class UserResponse {
       UserResponse();
 
+  bool success;
   String message;
   User data;
-  bool success;
+  String token;
+  int code;
 
   factory UserResponse.fromJson(Map<String,dynamic> json) => _$UserResponseFromJson(json);
   Map<String, dynamic> toJson() => _$UserResponseToJson(this);

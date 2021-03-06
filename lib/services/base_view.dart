@@ -1,18 +1,17 @@
 
-import 'package:flutter/cupertino.dart';
-import 'package:marvella/services/locator.dart';
+import 'package:flutter/material.dart';
 import 'package:marvella/view_model/base_view_model.dart';
 import 'package:provider/provider.dart';
+import '../services/locator.dart';
 
 class BaseView<T extends BaseViewModel> extends StatefulWidget{
-
   final Widget Function(BuildContext context, T model, Widget child) builder;
   final Function(T) onModelReady;
 
-  const BaseView({this.builder, this.onModelReady});
+  BaseView({this.builder, this.onModelReady});
 
   @override
-  _BaseViewState createState() => _BaseViewState();
+  _BaseViewState<T> createState()=> _BaseViewState<T>();
 
 }
 
@@ -31,8 +30,11 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>>{
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<T>(
+      builder: (context) => model,
       child: Consumer<T>(builder: widget.builder,),
     );
   }
+
+
 
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marvella/page/sign_in.dart';
+import 'package:marvella/repository/user_repository.dart';
 import 'package:marvella/services/data%20_static.dart';
 import 'package:marvella/services/helper.dart';
+import 'package:marvella/services/locator.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -12,6 +15,8 @@ class HomePage extends StatefulWidget{
 class _HomeState extends State<HomePage>{
 
   List<DataStatic> _listMenu;
+
+  UserRepository userRepository = locator<UserRepository>();
 
   @override
   void initState() {
@@ -64,7 +69,11 @@ class _HomeState extends State<HomePage>{
   Widget menuItem(DataStatic dataStatic){
     return GestureDetector(
       onTap: ()async{
-         dataStatic.future();
+         if(dataStatic.label == "Logout"){
+           logout(context);
+         }else{
+           dataStatic.future();
+         }
       },
       child: Container(
         padding: EdgeInsets.only(left: 16),
@@ -109,6 +118,14 @@ class _HomeState extends State<HomePage>{
         ),
       ),
     );
+  }
+
+  void logout(BuildContext context)async{
+    await userRepository.logout().then((value) {
+      if(value.success){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>SignIn()));
+      }
+    });
   }
 
 }
