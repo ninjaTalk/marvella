@@ -140,12 +140,17 @@ class UserRepository{
   }
 
   Future<UserResponse> getUser()async{
-    String url = "${GlobalConfiguration().get('endpoint')}/v1/user/${user.value.id}";
+    String url = "${GlobalConfiguration().get('endpoint')}/v1/users/${user.value.id}";
 
-    var response = await client.get(url);
+    log(url);
+    print(Helper.getHeader());
+
+    final client = new Client();
+
+    var response = await client.get(url,headers: Helper.getHeader());
 
     log("DETAIL USER RESPONSE");
-    log(response.body);
+    print(response.body);
 
     return UserResponse.fromJson(json.decode(response.body));
   }

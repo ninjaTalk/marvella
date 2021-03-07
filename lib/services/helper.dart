@@ -18,8 +18,9 @@ class Helper{
   Helper({this.context});
 
   static getHeader(){
-    Map<String, String> header = {
-      "Authorization" : "Bearer ${user.token.value}"
+    Map<String, String> header = new Map<String, String>();
+    header = {
+      "Authorization" : "Bearer ${user.token.value}",
     };
     return header;
   }

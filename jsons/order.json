@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "id_pemesan": 2,
+  "tanggal_pemesanan": "Sabtu, 6 Maret 2021",
+  "total_harga": "Rp. 30.000",
+  "bukti_bayar": "",
+  "status_pesanan": "Menunggu konfirmasi pembayaran",
+  "jenis_pembayaran": "-",
+  "status_pembayaran": "Menunggu konfirmasi",
+  "detail_pesanan": "$[]orderDesign"
+}

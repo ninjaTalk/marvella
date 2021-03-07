@@ -1,0 +1,11 @@
+{
+  "id_detail_pesanan": 1,
+  "id_pesanan": 1,
+  "jenis_desain": "Banner",
+  "bahan": "Standar",
+  "file": "http://192.168.1.15:8000/storage/pesanan/MFfvnLw9bDWzPVlm5zOhaqz7sfcHmmGcr102Rqm0.jpg",
+  "ukuran": "200 x 80 cm",
+  "keterangan_tambahan": "Finishing kaki",
+  "harga": "Rp. 30.000",
+  "jumlah": 1
+}

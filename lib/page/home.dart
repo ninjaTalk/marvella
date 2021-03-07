@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marvella/page/sign_in.dart';
 import 'package:marvella/repository/user_repository.dart';
+import 'package:marvella/services/base_view.dart';
 import 'package:marvella/services/data%20_static.dart';
 import 'package:marvella/services/helper.dart';
 import 'package:marvella/services/locator.dart';
+import 'package:marvella/services/view_state.dart';
+import 'package:marvella/view_model/user_view_model.dart';
+import '../repository/user_repository.dart' as user;
 
 class HomePage extends StatefulWidget{
   @override
@@ -28,41 +32,52 @@ class _HomeState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          title: ListTile(
-            // tileColor: Colors.blue,
-            contentPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-            leading: ClipRRect(
-              borderRadius: BorderRadius.circular(90),
-              child: Image.asset("assets/main/user.png"),
+    return BaseView<UserViewModel>(
+      onModelReady: (model)async{
+        await model.getUser();
+      },
+      builder: (context, model, child){
+        return Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(70.0),
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              title: ListTile(
+                // tileColor: Colors.blue,
+                contentPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(90),
+                  child: Image.asset("assets/main/user.png"),
+                ),
+                title: Helper.of(context).simpleText(txt: "${model?.user?.nama??user.user.value.nama}",fontweight: FontWeight.w700, fontSize: 16.0),
+                subtitle: Helper.of(context).simpleText(txt: "${model?.user?.email??user.user.value.email}", fontSize: 12.0),
+              ),
+              backgroundColor: Colors.white,
+              elevation: 4.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(16),
+                      bottomRight: Radius.circular(16)
+                  )
+              ),
             ),
-            title: Helper.of(context).simpleText(txt: "Angga Pande",fontweight: FontWeight.w700, fontSize: 16.0),
-            subtitle: Helper.of(context).simpleText(txt: "anggapande@gmail.com", fontSize: 12.0),
           ),
-          backgroundColor: Colors.white,
-          elevation: 4.0,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16)
-              )
+          extendBody: true,
+          body: model.state == ViewState.Busy ? Center(child: CircularProgressIndicator(),) : RefreshIndicator(
+            onRefresh: ()=>model.getUser(),
+            child: ListView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              itemCount: _listMenu.length,
+              itemBuilder: (BuildContext context, int index){
+                return Padding(padding: EdgeInsets.symmetric(vertical: 16),
+                  child: menuItem(_listMenu.elementAt(index)),
+                );
+              },
+            ),
           ),
-        ),
-      ),
-      extendBody: true,
-      body: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        itemCount: _listMenu.length,
-        itemBuilder: (BuildContext context, int index){
-          return Padding(padding: EdgeInsets.symmetric(vertical: 16),
-            child: menuItem(_listMenu.elementAt(index)),
-          );
-        },
-      ),
+        );
+      },
     );
   }
 

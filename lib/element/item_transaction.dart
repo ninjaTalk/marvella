@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marvella/models/index.dart';
+import '../repository/user_repository.dart' as user;
 import 'package:marvella/services/helper.dart';
 
 class ItemTransaction extends StatelessWidget{
+  Order order;
+  ItemTransaction({this.order});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,16 +29,17 @@ class ItemTransaction extends StatelessWidget{
         children: [
           Container(
             margin: EdgeInsets.only(bottom: 12),
-            child: Helper.of(context).simpleText(txt: "TRX210", fontweight: FontWeight.w700, fontSize: 18.0),
+            child: Helper.of(context).simpleText(txt: "${order.id}", fontweight: FontWeight.w700, fontSize: 18.0),
           ),
-          Helper.of(context).simpleText(txt: "Angga Pande", fontSize: 15.0, ),
-          Helper.of(context).simpleText(txt: "Banner 26 x 38, Deskripsi Tambahan : lorem eps…", fontSize: 15.0, ),
-          Helper.of(context).simpleText(txt: "22/01/2020", fontSize: 15.0,),
-          Helper.of(context).simpleText(txt: "Rp. 200.000 - Cash", fontSize: 15.0, ),
+          Helper.of(context).simpleText(txt: "${user.user.value.nama}", fontSize: 15.0, ),
+          Helper.of(context).simpleText(txt: "${order.detailPesanan[0].jenisDesain} ${order.detailPesanan[0].ukuran} "
+              "${order.detailPesanan[0].keteranganTambahan.length>30 ? order.detailPesanan[0].keteranganTambahan.substring(0,30) + "..." : order.detailPesanan[0].keteranganTambahan}", fontSize: 15.0, ),
+          Helper.of(context).simpleText(txt: "${order.tanggalPemesanan}", fontSize: 15.0,),
+          Helper.of(context).simpleText(txt: "${order.totalHarga} - Cash", fontSize: 15.0, ),
 
           Container(
             margin: EdgeInsets.only(top: 12),
-            child: Helper.of(context).simpleText(txt: "Success", fontweight: FontWeight.w700, fontSize: 18.0, color: Colors.green),
+            child: Helper.of(context).simpleText(txt: "${order.statusPesanan}", fontweight: FontWeight.w700, fontSize: 18.0, color: Colors.green),
           ),
         ],
       ),

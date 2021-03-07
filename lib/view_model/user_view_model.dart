@@ -53,16 +53,16 @@ class UserViewModel extends BaseViewModel{
 
   Future<void> getUser()async{
     setState(ViewState.Busy);
-    try{
+    // try{
       UserResponse user = await userRepository.getUser();
       if(user.success){
         this.user = user.data;
       }else{
         Fluttertoast.showToast(msg: "${user.message}");
       }
-    }catch(e){
-      Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
-    }
+    // }catch(e){
+    //   Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
+    // }
 
     setState(ViewState.Idle);
   }
