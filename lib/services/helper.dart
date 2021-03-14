@@ -58,7 +58,7 @@ class Helper{
     );
   }
 
-  Widget nextButton(Function function, {Map<String, dynamic> data}){
+  Widget nextButton(Function function, {Map<String, dynamic> data, title}){
     return RaisedButton(
       onPressed: (){
         function();
@@ -68,7 +68,7 @@ class Helper{
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16))
       ),
-      child: Helper.of(context).simpleText(txt: "Lanjut",
+      child: Helper.of(context).simpleText(txt: "$title",
           color: Colors.white,
           fontweight: FontWeight.w700,
           fontSize: 15.0),

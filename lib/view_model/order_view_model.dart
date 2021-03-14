@@ -14,6 +14,8 @@ class OrderViewModel extends BaseViewModel{
   Order order;
   List<Order> listenOrder = new List<Order>();
   List<Design> listenDesign = new List<Design>();
+  bool addSuccess = false;
+  List<PaymentMethod> listPayment = new List<PaymentMethod>();
 
   Future<void> getAllOrder()async{
     setState(ViewState.Busy);
@@ -39,6 +41,30 @@ class OrderViewModel extends BaseViewModel{
     setState(ViewState.Idle);
   }
 
+  Future<void> getOrderDetail(id)async{
+    setState(ViewState.Busy);
+
+    OrderResponse response = await orderRepository.getDetailOrder(id);
+
+    if(response.success){
+      this.order = response.data;
+    }
+
+    setState(ViewState.Idle);
+  }
+
+  Future<void> getPayment()async{
+    setState(ViewState.Busy);
+
+    PaymentsMethodResponse response = await orderRepository.getPaymentMethod();
+
+    if(response.success){
+      this.listPayment = response.data;
+    }
+
+    setState(ViewState.Idle);
+  }
+
 
   Future<void> addOrder(File file, Map<String, String> dataSend)async{
     setLoad(ViewLoad.Busy);
@@ -47,6 +73,7 @@ class OrderViewModel extends BaseViewModel{
       OrderResponse response = await orderRepository.addOrder(dataSend, file);
 
       if(response.success){
+        this.addSuccess = true;
         this.order = response.data;
       }
     }catch(e){
@@ -58,7 +85,7 @@ class OrderViewModel extends BaseViewModel{
 
 
   Future<void> addProfOfPayment(orderId, paymentId, File file)async{
-    setState(ViewState.Busy);
+    setLoad(ViewLoad.Busy);
 
     try{
       OrderResponse response = await orderRepository.proofPayment(orderId, paymentId, file);
@@ -70,6 +97,6 @@ class OrderViewModel extends BaseViewModel{
       Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
     }
 
-    setState(ViewState.Idle);
+    setLoad(ViewLoad.Idle);
   }
 }

@@ -136,10 +136,9 @@ class _HomeState extends State<HomePage>{
   }
 
   void logout(BuildContext context)async{
-    await userRepository.logout().then((value) {
-      if(value.success){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>SignIn()));
-      }
+    await userRepository.logout();
+    await userRepository.removeUser().whenComplete(() {
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>SignIn()), (route) => false);
     });
   }
 

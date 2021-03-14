@@ -1,0 +1,6 @@
+{
+  "success": true,
+  "message": "Jenis pembayaran",
+  "data": "$[]paymentMethod",
+  "code": 200
+}

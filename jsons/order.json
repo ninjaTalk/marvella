@@ -6,6 +6,8 @@
   "bukti_bayar": "",
   "status_pesanan": "Menunggu konfirmasi pembayaran",
   "jenis_pembayaran": "-",
+  "id_jenis_pembayaran": 1,
+  "id_status_pesanan": 3,
   "status_pembayaran": "Menunggu konfirmasi",
   "detail_pesanan": "$[]orderDesign"
 }

@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:marvella/models/index.dart';
@@ -24,9 +27,9 @@ class OrderPage extends StatefulWidget{
 class _OrderState extends State<OrderPage>{
 
   TextEditingController _product = TextEditingController();
-  TextEditingController _size = TextEditingController();
-  TextEditingController _price = TextEditingController();
-  TextEditingController _paymentMethod = TextEditingController();
+  TextEditingController _sizeHeght = TextEditingController();
+  TextEditingController _sizeWidth = TextEditingController();
+  TextEditingController _qty = TextEditingController(text: "1");
   TextEditingController _description = TextEditingController();
 
   Design selectedDesign;
@@ -48,57 +51,70 @@ class _OrderState extends State<OrderPage>{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // TextFormField(
-                //   controller: _product,
-                //   enabled: false,
-                //   // initialValue: "Banner",
-                //   decoration: InputDecoration(
-                //       labelText: "Produk",
-                //       labelStyle: TextStyle(
-                //           color: Colors.black
-                //       )
-                //   ),
-                // ),
-                //
-                // TextFormField(
-                //   controller: _size,
-                //   enabled: false,
-                //   // initialValue: "Banner 1.5 x 2 m",
-                //   decoration: InputDecoration(
-                //       labelText: "Ukuran",
-                //       labelStyle: TextStyle(
-                //           color: Colors.black
-                //       )
-                //   ),
-                // ),
-                // TextFormField(
-                //   controller: _price,
-                //   enabled: false,
-                //   // initialValue: "Harga",
-                //   decoration: InputDecoration(
-                //       labelText: "Harga",
-                //       labelStyle: TextStyle(
-                //           color: Colors.black
-                //       )
-                //   ),
-                // ),
-
+                Container(
+                  child: Helper.of(context).simpleText(txt: "Produk", fontSize: 16.0,color: Colors.black45),
+                ),
                 selectProduct(model),
+                SizedBox(height: 24,),
+                Container(
+                  child: Helper.of(context).simpleText(txt: "Ukuran", fontSize: 16.0,color: Colors.black45),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    children: [
+                      Expanded(child: TextFormField(
+                        controller: _sizeWidth,
+                        // initialValue: "Metode Pembayaran",
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        decoration: InputDecoration(
+                            labelText: "Panjang",
+                            labelStyle: TextStyle(
+                                color: Colors.black,
+                              fontSize: 14
+                            )
+                        ),
+                      ),),
+                      Container(width: 40,
+                      margin: EdgeInsets.symmetric(horizontal: 16,),
+                      child: Center(child: Text(":",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),),),),
+                      Expanded(child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        controller: _sizeHeght,
+                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        decoration: InputDecoration(
+                            labelText: "Lebar",
+                            labelStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14
+                            )
+                        ),
+                      ),)
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 24,),
                 TextFormField(
-                  controller: _paymentMethod,
-                  enabled: false,
+                  controller: _qty,
                   // initialValue: "Metode Pembayaran",
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: InputDecoration(
-                      labelText: "Metode Pembayaran",
+                      labelText: "Jumlah",
                       labelStyle: TextStyle(
-                          color: Colors.black
+                          color: Colors.black,
+                          fontSize: 14
                       )
                   ),
                 ),
 
+                SizedBox(height: 24,),
+
                 Container(
-                  margin: EdgeInsets.only(top: 30, bottom: 8),
-                  child: Helper.of(context).simpleText(txt: "Keterangan*", fontSize: 14.0),
+                  margin: EdgeInsets.only(top: 38, bottom: 8),
+                  child: Helper.of(context).simpleText(txt: "Keterangan*", fontSize: 14.0,color: Colors.black45),
                 ),
 
                 Container(
@@ -123,11 +139,11 @@ class _OrderState extends State<OrderPage>{
                     ),
                   ),
                 ),
-                SizedBox(height: 24,),
+                SizedBox(height: 34,),
 
                 Container(
                   margin: EdgeInsets.only(bottom: 8),
-                  child: Helper.of(context).simpleText(txt: "Tambah Desain", fontSize: 14.0),
+                  child: Helper.of(context).simpleText(txt: "Tambah Desain", fontSize: 14.0,color: Colors.black45),
                 ),
 
                 GestureDetector(
@@ -147,16 +163,28 @@ class _OrderState extends State<OrderPage>{
                       ),
                       padding: fileDesign!=null ? EdgeInsets.zero : EdgeInsets.all(24),
                       height: 160,width: 240,
-                      child: fileDesign!=null ? Image.file(fileDesign,width: double.infinity,fit: BoxFit.fitWidth,) : Image.asset("assets/main/image.png"),
+                      child: fileDesign!=null ? Image.file(fileDesign,width: double.infinity,fit: BoxFit.scaleDown,) : Image.asset("assets/main/image.png"),
                     )
                 )
               ],
             ),
           ),
         ),
-        floatingActionButton: Helper.of(context).nextButton((){
-          Navigator.push(context, MaterialPageRoute(builder: (_)=>ProofPaymentPage()));
-        }),
+        floatingActionButton: model.state == ViewLoad.Busy ? CircularProgressIndicator() : Helper.of(context).nextButton((){
+          validate((){
+            widget.dataSend['id_desain'] = selectedDesign.idDesain.toString();
+            widget.dataSend['keterangan'] = _description.value.text;
+            widget.dataSend['panjang'] = _sizeWidth.value.text;
+            widget.dataSend['lebar'] = _sizeHeght.value.text;
+            widget.dataSend['jumlah'] = _qty.value.text;
+            log(json.encode(widget.dataSend).toString());
+            model.addOrder(fileDesign, widget.dataSend).whenComplete(() {
+              if(model.addSuccess){
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>ProofPaymentPage(order: model.order,)));
+              }
+            });
+          });
+        }, title: "Buat Pesanan"),
       ),
     );
   }
@@ -168,15 +196,16 @@ class _OrderState extends State<OrderPage>{
         return InputDecorator(
           decoration: InputDecoration(
             hintText: "Pilih Product Anda",
+            hintStyle: TextStyle(color: Colors.black)
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<Design>(
-                dropdownColor: Colors.black87,
+                dropdownColor: Colors.white,
                 value: selectedDesign,
-                hint: Helper.of(context).simpleText(txt: "Pilih Produk",color: Colors.white),
+                hint: Helper.of(context).simpleText(txt: "Pilih Produk",color: Colors.black),
                 isDense: true,
                 items: model.listenDesign.map<DropdownMenuItem<Design>>((e){
-                  return DropdownMenuItem<Design>(child: Helper.of(context).simpleText(txt: e.jenisDesain + " ${e.ukuran} ${e.harga} ",color: Colors.white),value: e,);
+                  return DropdownMenuItem<Design>(child: Helper.of(context).simpleText(txt: e.jenisDesain + " ${e.ukuran} ${e.harga} ",color: Colors.black),value: e,);
                 }).toList(),
                 onChanged: (newValue){
                   setState(() {
@@ -188,11 +217,27 @@ class _OrderState extends State<OrderPage>{
       },
     );
   }
+  
+  validate(Function function){
+    if(selectedDesign == null ){
+      Fluttertoast.showToast(msg: "Mohon Pilih Produk Anda Terlebih Dahulu",toastLength: Toast.LENGTH_LONG);
+    }else if(_sizeHeght.value.text.isEmpty || _sizeHeght.value.text.trim().length < 0){
+      Fluttertoast.showToast(msg: "Mohon Memasukkan Lebar Pesanan Anda Terlebih Dahulu",toastLength: Toast.LENGTH_LONG);
+    }else if(_sizeWidth.value.text.isEmpty || _sizeWidth.value.text.trim().length < 0){
+      Fluttertoast.showToast(msg: "Mohon Memasukkan Panjang Pesanan Anda Terlebih Dahulu",toastLength: Toast.LENGTH_LONG);
+    }else if(_qty.value.text.isEmpty || _qty.value.text.trim().length < 0){
+      Fluttertoast.showToast(msg: "Mohon Memasukkan Jumlah Anda Terlebih Dahulu",toastLength: Toast.LENGTH_LONG);
+    }else if(fileDesign == null){
+      Fluttertoast.showToast(msg: "Mohon Memasukkan Desain Pesanan Anda Terlebih Dahulu",toastLength: Toast.LENGTH_LONG);
+    }else{
+      function();
+    }
+  }
 
 
   getImage()async{
     final _piker = ImagePicker();
-    final response =  await _piker.getImage(source: ImageSource.gallery);
+    final response =  await _piker.getImage(source: ImageSource.camera);
     if(response!=null)
       setState(() {
         fileDesign = File(response.path);

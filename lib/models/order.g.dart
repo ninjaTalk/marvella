@@ -15,6 +15,8 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     ..buktiBayar = json['bukti_bayar'] as String
     ..statusPesanan = json['status_pesanan'] as String
     ..jenisPembayaran = json['jenis_pembayaran'] as String
+    ..idJenisPembayaran = json['id_jenis_pembayaran'] as int
+    ..idStatusPesanan = json['id_status_pesanan'] as int
     ..statusPembayaran = json['status_pembayaran'] as String
     ..detailPesanan = (json['detail_pesanan'] as List)
         ?.map((e) =>
@@ -30,6 +32,8 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'bukti_bayar': instance.buktiBayar,
       'status_pesanan': instance.statusPesanan,
       'jenis_pembayaran': instance.jenisPembayaran,
+      'id_jenis_pembayaran': instance.idJenisPembayaran,
+      'id_status_pesanan': instance.idStatusPesanan,
       'status_pembayaran': instance.statusPembayaran,
       'detail_pesanan': instance.detailPesanan,
     };

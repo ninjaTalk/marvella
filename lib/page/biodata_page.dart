@@ -47,7 +47,7 @@ class _BioState extends State<BioPage>{
         dataSend['email'] = user.user.value.email;
         dataSend['alamat'] = user.user.value.alamat;
         Navigator.push(context, MaterialPageRoute(builder: (_)=>OrderPage(dataSend: dataSend,)));
-      }),
+      },title: "Lanjut"),
     );
   }
 

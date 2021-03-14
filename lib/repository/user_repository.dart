@@ -150,7 +150,9 @@ class UserRepository{
     var response = await client.get(url,headers: Helper.getHeader());
 
     log("DETAIL USER RESPONSE");
+    print(response.statusCode);
     print(response.body);
+
 
     return UserResponse.fromJson(json.decode(response.body));
   }

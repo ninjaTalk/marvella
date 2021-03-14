@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:marvella/models/index.dart';
 import 'package:marvella/repository/user_repository.dart';
 import 'package:marvella/services/helper.dart';
+import 'package:http/http.dart' as http;
 
 class OrderRepository{
 
@@ -37,13 +38,11 @@ class OrderRepository{
   }
 
   Future<OrderResponse>  addOrder(Map<String, String> dataSend , File file)async{
-    final String url = '${GlobalConfiguration().getString('endpoint')}v1/users/${user.value.id}/pesanan';
+    final String url = '${GlobalConfiguration().getString('endpoint')}/v1/users/${user.value.id}/pesanan';
 
-    var dataSend =  new Map<String, dynamic>();
+    log(url);
 
-    dataSend['file'] = file;
-
-    MultipartRequest request =  new MultipartRequest('POST', Uri.parse(url));
+    http.MultipartRequest request =  new http.MultipartRequest('POST', Uri.parse(url));
 
     request.headers.addAll(Helper.getHeader());
     request.fields['id_desain'] = dataSend['id_desain'];
@@ -51,9 +50,8 @@ class OrderRepository{
     request.fields['panjang'] = dataSend['panjang'];
     request.fields['lebar'] = dataSend['lebar'];
     request.fields['jumlah'] = dataSend['jumlah'];
-    request.files.add(await MultipartFile.fromPath('file', file.path));
-
-    StreamedResponse response = await request.send();
+    request.files.add(await http.MultipartFile.fromPath('file', file.path));
+    http.StreamedResponse response = await request.send();
 
     final res = await response.stream.bytesToString();
 
@@ -63,7 +61,9 @@ class OrderRepository{
   }
 
   Future<OrderResponse>  proofPayment(orderId, paymentId, File file)async{
-    final String url = '${GlobalConfiguration().getString('endpoint')}v1/users/${user.value.id}/pesanan/$orderId/pay';
+    final String url = '${GlobalConfiguration().getString('endpoint')}/v1/users/${user.value.id}/pesanan/$orderId/pay';
+
+    log(url);
 
     var dataSend =  new Map<String, dynamic>();
 
@@ -82,6 +82,32 @@ class OrderRepository{
     print(res);
 
     return OrderResponse.fromJson(json.decode(res));
+  }
+
+  Future<OrderResponse> getDetailOrder(id)async{
+    String url = "${GlobalConfiguration().get('endpoint')}/v1/users/${user.value.id}/pesanan/${id}";
+
+    final client = new Client();
+
+    var response = await client.get(url,headers: Helper.getHeader());
+
+    log("DETAIL Order RESPONSE");
+    print(response.body);
+
+    return OrderResponse.fromJson(json.decode(response.body));
+  }
+
+  Future<PaymentsMethodResponse> getPaymentMethod()async{
+    String url = "${GlobalConfiguration().get('endpoint')}/v1/jenis_pembayaran";
+
+    final client = new Client();
+
+    var response = await client.get(url,headers: Helper.getHeader());
+
+    log("DETAIL Order RESPONSE");
+    print(response.body);
+
+    return PaymentsMethodResponse.fromJson(json.decode(response.body));
   }
 
 

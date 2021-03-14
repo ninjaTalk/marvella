@@ -14,6 +14,8 @@ class Order {
   @JsonKey(name: 'bukti_bayar') String buktiBayar;
   @JsonKey(name: 'status_pesanan') String statusPesanan;
   @JsonKey(name: 'jenis_pembayaran') String jenisPembayaran;
+  @JsonKey(name: 'id_jenis_pembayaran') int idJenisPembayaran;
+  @JsonKey(name: 'id_status_pesanan') int idStatusPesanan;
   @JsonKey(name: 'status_pembayaran') String statusPembayaran;
   @JsonKey(name: 'detail_pesanan') List<OrderDesign> detailPesanan;
 

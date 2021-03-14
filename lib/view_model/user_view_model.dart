@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:marvella/models/index.dart';
 import 'package:marvella/page/home.dart';
+import 'package:marvella/page/sign_in.dart';
 import 'package:marvella/repository/user_repository.dart';
 import 'package:marvella/services/helper.dart';
 import 'package:marvella/services/locator.dart';
@@ -20,16 +21,16 @@ class UserViewModel extends BaseViewModel{
 
   Future<void> login(email, password)async{
     setState(ViewState.Busy);
-    try{
+    // try{
       UserResponse user = await userRepository.login(email, password);
       if(user.success){
         Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
       }else{
         Fluttertoast.showToast(msg: "${user.message}");
       }
-    }catch(e){
-      Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
-    }
+    // }catch(e){
+    //   Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
+    // }
 
     setState(ViewState.Idle);
   }
@@ -53,16 +54,19 @@ class UserViewModel extends BaseViewModel{
 
   Future<void> getUser()async{
     setState(ViewState.Busy);
-    // try{
+    try{
       UserResponse user = await userRepository.getUser();
       if(user.success){
         this.user = user.data;
       }else{
         Fluttertoast.showToast(msg: "${user.message}");
       }
-    // }catch(e){
-    //   Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
-    // }
+    }catch(e){
+      Fluttertoast.showToast(msg: "Terjadi Kesalahan ");
+      await userRepository.removeUser().whenComplete(() {
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>SignIn()), (route) => false);
+      });
+    }
 
     setState(ViewState.Idle);
   }
