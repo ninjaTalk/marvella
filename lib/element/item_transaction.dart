@@ -41,7 +41,7 @@ class ItemTransaction extends StatelessWidget{
                 "${order.detailPesanan[0].keteranganTambahan.length>30 ? order.detailPesanan[0].keteranganTambahan.substring(0,30) + "..." : order.detailPesanan[0].keteranganTambahan}", fontSize: 15.0, ) :
             Container(),
             Helper.of(context).simpleText(txt: "${order.tanggalPemesanan}", fontSize: 15.0,),
-            Helper.of(context).simpleText(txt: "${order.totalHarga} - ${order.jenisPembayaran}", fontSize: 15.0, ),
+            Helper.of(context).simpleText(txt: "${order.totalHarga} - ${order.id}", fontSize: 15.0, ),
 
             Container(
               margin: EdgeInsets.only(top: 12),

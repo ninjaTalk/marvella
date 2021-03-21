@@ -53,6 +53,11 @@ dependencies:
 
   cached_network_image: ^2.5.0
 
+  #local notification
+  flutter_local_notifications: ^3.0.3
+
+  firebase_messaging: ^6.0.13
+
   #locator
   get_it: ^5.0.6
 

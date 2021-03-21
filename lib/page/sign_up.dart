@@ -113,7 +113,7 @@ class _SignUpState extends State<SignUpPage>{
                   value: gender,
                   hint: Helper.of(context).simpleText(txt: "Pilih Jenis Kelamin",color: Colors.white),
                   isDense: true,
-                  items: <String>['Laki-Laki', 'Perempuan'].map<DropdownMenuItem<String>>((e){
+                  items: <String>['Laki-laki', 'Perempuan'].map<DropdownMenuItem<String>>((e){
                     return DropdownMenuItem<String>(child: Helper.of(context).simpleText(txt: e,color: Colors.white),value: e,);
                   }).toList(),
                   onChanged: (String newValue){
@@ -219,7 +219,7 @@ class _SignUpState extends State<SignUpPage>{
             }
           }
           if(type == 1){
-            return input.isEmpty ? "Mohon memasukkan password yang sesuai" : input.length<6 ? "Password minimal 6 karakter" : null;
+            return input.isEmpty ? "Mohon memasukkan password yang sesuai" : input.length<8 ? "Password minimal 6 karakter" : null;
           }
           if(type == 2){
             return input.isEmpty ? "Mohon memasukkan nama yang benar" :  null;

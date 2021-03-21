@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1076560178758",
+    "project_id": "marvella",
+    "storage_bucket": "marvella.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076560178758:android:f7ce37bb662c9e9ea16447",
+        "android_client_info": {
+          "package_name": "com.marvella.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076560178758-g05mou16quk11t0fjcvlb599ub0r6tbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdoRL03B2gRW1lgckhXl1m1ro1Yg7OfyI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076560178758-g05mou16quk11t0fjcvlb599ub0r6tbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

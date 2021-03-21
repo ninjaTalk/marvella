@@ -163,7 +163,7 @@ class _OrderState extends State<OrderPage>{
                       ),
                       padding: fileDesign!=null ? EdgeInsets.zero : EdgeInsets.all(24),
                       height: 160,width: 240,
-                      child: fileDesign!=null ? Image.file(fileDesign,width: double.infinity,fit: BoxFit.scaleDown,) : Image.asset("assets/main/image.png"),
+                      child: fileDesign!=null ? Image.file(fileDesign,width: double.infinity,fit: BoxFit.cover,) : Image.asset("assets/main/image.png"),
                     )
                 )
               ],
@@ -237,7 +237,7 @@ class _OrderState extends State<OrderPage>{
 
   getImage()async{
     final _piker = ImagePicker();
-    final response =  await _piker.getImage(source: ImageSource.camera);
+    final response =  await _piker.getImage(source: ImageSource.gallery);
     if(response!=null)
       setState(() {
         fileDesign = File(response.path);

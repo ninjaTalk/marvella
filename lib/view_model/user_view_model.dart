@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,20 +20,31 @@ class UserViewModel extends BaseViewModel{
 
   BuildContext context;
 
+  var deviceId;
+
+  FirebaseMessaging fm =  new FirebaseMessaging();
+
   User user;
 
   Future<void> login(email, password)async{
     setState(ViewState.Busy);
-    // try{
-      UserResponse user = await userRepository.login(email, password);
+    try{
+      this.deviceId = await fm.getToken();
+    }catch(e){
+
+    }
+    log("FIREBASE DEVICE \n");
+    print(await fm.getToken());
+    try{
+      UserResponse user = await userRepository.login(email, password,device_id: deviceId);
       if(user.success){
         Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
       }else{
         Fluttertoast.showToast(msg: "${user.message}");
       }
-    // }catch(e){
-    //   Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
-    // }
+    }catch(e){
+      Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
+    }
 
     setState(ViewState.Idle);
   }

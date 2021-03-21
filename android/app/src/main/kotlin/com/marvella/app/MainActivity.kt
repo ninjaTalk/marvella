@@ -1,4 +1,4 @@
-package com.marvella.marvella
+package com.marvella.app
 
 import io.flutter.embedding.android.FlutterActivity
 

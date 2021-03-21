@@ -7,5 +7,6 @@
   "email": "admin@marvella.test",
   "role": "admin",
   "status_user": "Aktif",
-  "device_id": "92dd2b54-f753-4751-b006-2b9170a18af7"
+  "device_id": "92dd2b54-f753-4751-b006-2b9170a18af7",
+  "password" : "sasas"
 }

@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:marvella/page/sign_in.dart';
 import 'package:marvella/repository/user_repository.dart';
 import 'package:marvella/services/base_view.dart';
@@ -18,12 +23,135 @@ class HomePage extends StatefulWidget{
 
 class _HomeState extends State<HomePage>{
 
+
+  FirebaseMessaging _firebaseMessaging =  new FirebaseMessaging();
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  initLocalNotification()async{
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    final IOSInitializationSettings iosInitializationSettings =
+    IOSInitializationSettings();
+    final MacOSInitializationSettings macOSInitializationSettings=
+    MacOSInitializationSettings();
+    final InitializationSettings initializationSettings =
+    InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: iosInitializationSettings,
+        macOS: macOSInitializationSettings
+    );
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+  }
+
+  Future onSelectNotification(String dataJSON) async {
+    dynamic data = json.decode(dataJSON);
+    print(data);
+    print('ok notif');
+    navigateToDetail(data);
+    print('show notif detail');
+  }
+
+  navigateToDetail(Map<dynamic, dynamic> data) async {
+
+    Map<dynamic,dynamic> dataInfo = new Map<dynamic, dynamic>();
+    dataInfo = data['data'];
+
+    print("NAVIGATE");
+
+    if(dataInfo.containsKey('id')) {
+
+    }
+  }
+
+  Map<String,String> convertDataDetail(dynamic data){
+    Map<String,String> dataDetail = new Map<String,String>();
+    if(data.containsKey('id'))
+      dataDetail['id'] = data['id']??'';
+    return dataDetail;
+  }
+
+  Future showNotificationForeground(Map<String, dynamic> message) async{
+    String title = "";
+    String body = "";
+    try{
+      final dynamic notification = message['notification'] ?? message;
+      title = notification['title']??message['tittle'];
+      body = notification['body']??message['body'];
+      final dynamic data = message['data']??message;
+
+      log("data");
+      log(title);
+      log(body);
+
+      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'channel-fcm', 'Notification', 'Push Notification',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker',
+        playSound: true,
+        channelShowBadge: true,
+        icon: '@mipmap/ic_launcher',
+
+      );
+      var iOSPlatformChannelSpecifies = IOSNotificationDetails();
+
+      var macPlatformChannel = MacOSNotificationDetails();
+
+      var platformChannelSpecifics = NotificationDetails(
+          android: androidPlatformChannelSpecifics,
+          iOS: iOSPlatformChannelSpecifies,
+          macOS: macPlatformChannel
+      );
+
+
+      await flutterLocalNotificationsPlugin.show(0, title, body, platformChannelSpecifics,payload: json.encode(message));
+
+
+    }catch (e){
+      print("Error : $e");
+    }
+  }
+
+  initFCM(){
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async{
+        print("on message : $message");
+        showNotificationForeground(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+        final dynamic data = message['data'] ?? message;
+        navigateToDetail(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+        navigateToDetail(message);
+      },
+    );
+
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(
+            sound: true, badge: true, alert: true, provisional: true
+        ));
+    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings event) {
+      print("Settings registered: $event");
+    });
+    _firebaseMessaging.getToken().then((String value) {
+      assert(value!=null);
+      print("Push Messaging token: $value");
+    });
+
+  }
+
   List<DataStatic> _listMenu;
 
   UserRepository userRepository = locator<UserRepository>();
 
   @override
   void initState() {
+    initFCM();
+    initLocalNotification();
     setState(() {
       _listMenu = GetData.getDataMenu(context);
     });

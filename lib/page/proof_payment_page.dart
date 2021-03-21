@@ -145,7 +145,7 @@ class _ProofPaymentState extends State<ProofPaymentPage>{
 
   getImage()async{
     final _piker = ImagePicker();
-    final response =  await _piker.getImage(source: ImageSource.camera);
+    final response =  await _piker.getImage(source: ImageSource.gallery,imageQuality: 50);
     if(response!=null)
       setState(() {
         file = File(response.path);

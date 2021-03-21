@@ -82,19 +82,23 @@ class UserRepository{
   }
 
   
-  Future<UserResponse> login(email,password)async{
+  Future<UserResponse> login(email,password, {device_id})async{
     String url = "${GlobalConfiguration().get('endpoint')}/v1/login";
 
     final client = new Client();
 
+    print("ini device_id");
+    print(device_id);
+
     var response = await client.post(url,
       body: {
         "email" : email,
-        "password" : password
+        "password" : password,
+        "device_id" : device_id
       }
     );
 
-    if(response.statusCode == 200 && json.decode(response.body)['data']!=null){
+    if(response.statusCode == 201 && json.decode(response.body)['data']!=null){
       setCurrentUser(response.body);
       setCurrentToken(json.decode(response.body)['token']);
       getCurrentUser();
@@ -115,21 +119,27 @@ class UserRepository{
 
     print(json.encode(dataSend));
 
+    User userData =  new User();
+    userData.nama =  dataSend['name'];
+    userData.noTelp = dataSend['no_telp'];
+    userData.jk = dataSend['jk'];
+    userData.alamat = dataSend['alamat'];
+    userData.email = dataSend['email'];
+    userData.password = dataSend['password'];
+
     var response = await client.post(url,
-        body: {
-        "nama" : dataSend['name'],
-        "no_telp" : dataSend['no_telp'],
-        "jk" : dataSend['jk'],
-        "alamat" : dataSend['alamat'],
-        "email" : dataSend['email'],
-        "password" : dataSend['password']
-        });
+        body: json.encode(userData),
+       headers:{
+         'Content-Type' : "application/json"
+       }
+    );
 
     log("REGISTER RESPONSE");
     print(url);
     log(response.body);
+    log(response.statusCode.toString());
 
-    if(response.statusCode == 200 && json.decode(response.body)['data']!=null){
+    if(response.statusCode == 201 && json.decode(response.body)['data']!=null){
       setCurrentUser(response.body);
       setCurrentToken(json.decode(response.body)['token']);
       getCurrentUser();
