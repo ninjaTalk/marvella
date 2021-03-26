@@ -93,12 +93,11 @@ class UserRepository{
     var response = await client.post(url,
       body: {
         "email" : email,
-        "password" : password,
-        "device_id" : device_id
+        "password" : password
       }
     );
 
-    if(response.statusCode == 201 && json.decode(response.body)['data']!=null){
+    if(response.statusCode == 200 && json.decode(response.body)['data']!=null){
       setCurrentUser(response.body);
       setCurrentToken(json.decode(response.body)['token']);
       getCurrentUser();
@@ -181,6 +180,23 @@ class UserRepository{
     log(response.body);
 
     return LogoutResponse.fromJson(json.decode(response.body));
+  }
+
+  Future setDevice(id) async {
+    String url = "${GlobalConfiguration().get('endpoint')}/v1/setDeviceID?id=$id";
+
+    print(url);
+
+    var response = await client.patch(url, headers: Helper.getHeader());
+
+    if(response.statusCode == 200){
+      removeUser();
+    }
+    print(json.encode(Helper.getHeader()));
+    log("Logout RESPONSE");
+    log(response.body);
+
+    // return LogoutResponse.fromJson(json.decode(response.body));
   }
 
 

@@ -37,8 +37,10 @@ class UserViewModel extends BaseViewModel{
     print(await fm.getToken());
     try{
       UserResponse user = await userRepository.login(email, password,device_id: deviceId);
-      if(user.success){
-        Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+      if(user.code == 200){
+        setDeviceId(deviceId).whenComplete(() {
+          Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+        });
       }else{
         Fluttertoast.showToast(msg: "${user.message}");
       }
@@ -53,9 +55,17 @@ class UserViewModel extends BaseViewModel{
     setState(ViewState.Busy);
     print("REGIS");
     try{
+      this.deviceId = await fm.getToken();
+    }catch(e){
+
+    }
+    log("FIREBASE DEVICE \n");
+    print(await fm.getToken());
+    try{
       UserResponse user = await userRepository.register(dataSend);
       if(user.success){
-        Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+        setDeviceId(deviceId);
+        // Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
       }else{
         Fluttertoast.showToast(msg: "${user.message}");
       }
@@ -64,6 +74,12 @@ class UserViewModel extends BaseViewModel{
     }
 
     setState(ViewState.Idle);
+  }
+
+  Future<void> setDeviceId(id) async {
+    setOption(ViewOption.Busy);
+    await userRepository.setDevice(id);
+    setOption(ViewOption.Idle);
   }
 
   Future<void> getUser()async{

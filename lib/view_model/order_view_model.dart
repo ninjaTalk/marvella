@@ -84,11 +84,17 @@ class OrderViewModel extends BaseViewModel{
   }
 
 
-  Future<void> addProfOfPayment(orderId, paymentId, File file)async{
+  Future<void> addProfOfPayment(String orderId, String paymentId, {File file})async{
     setLoad(ViewLoad.Busy);
 
     try{
-      OrderResponse response = await orderRepository.proofPayment(orderId, paymentId, file);
+      OrderResponse response;
+      if(file!=null && paymentId == "3"){
+         response = await orderRepository.proofPayment(orderId, paymentId, file);
+      }else{
+        response = await orderRepository.proofPaymentWithoutImage(orderId, paymentId);
+      }
+
 
       if(response.success){
         this.order = response.data;

@@ -1,0 +1,6 @@
+{
+  "success": true,
+  "message": "List of all notification",
+  "data": "$[]notifications",
+  "code": 200
+}

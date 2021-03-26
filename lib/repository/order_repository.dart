@@ -68,8 +68,6 @@ class OrderRepository{
 
     var dataSend =  new Map<String, dynamic>();
 
-    dataSend['bukti_bayar'] = file;
-
     MultipartRequest request =  new MultipartRequest('POST', Uri.parse(url));
 
     request.headers.addAll(Helper.getHeader());
@@ -83,6 +81,21 @@ class OrderRepository{
     print(res);
 
     return OrderResponse.fromJson(json.decode(res));
+  }
+
+  Future<OrderResponse> proofPaymentWithoutImage(orderId,paymentId)async{
+    String url = "${GlobalConfiguration().get('endpoint')}/v1/users/${user.value.id}/pesanan/$orderId/pay";
+
+    final client = new Client();
+
+    var response = await client.post(url,headers: Helper.getHeader(),body: {
+      "id_jenis_pembayaran" : "$paymentId"
+    });
+
+    log("DETAIL Order RESPONSE");
+    print(response.body);
+
+    return OrderResponse.fromJson(json.decode(response.body));
   }
 
   Future<OrderResponse> getDetailOrder(id)async{

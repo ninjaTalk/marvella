@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marvella/models/index.dart';
 import 'package:marvella/services/helper.dart';
 
 class ItemNotifiacation extends StatelessWidget{
+  Notifications notifications;
+  ItemNotifiacation({this.notifications});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,9 +26,9 @@ class ItemNotifiacation extends StatelessWidget{
         tileColor: Colors.white,
         title: Container(
           margin: EdgeInsets.only(bottom: 8),
-          child: Helper.of(context).simpleText(txt: "Konfirmasi Pembayaran TRX210", fontweight: FontWeight.w700, fontSize: 18.0),
+          child: Helper.of(context).simpleText(txt: "${notifications.judul}", fontweight: FontWeight.w700, fontSize: 18.0),
         ),
-        subtitle: Helper.of(context).simpleText(txt:"Pembayaran anda telah diterima, mohon menunggu konfirmasi pesanan selesai.",
+        subtitle: Helper.of(context).simpleText(txt:"${notifications.tanggalNotifikasi}, ${notifications.keterangan}",
             fontSize: 14.0
         ),
       ),

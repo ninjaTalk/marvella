@@ -93,18 +93,14 @@ class _ProofPaymentState extends State<ProofPaymentPage>{
         ),
         floatingActionButton: model.state == ViewLoad.Busy ? CircularProgressIndicator() : Helper.of(context).nextButton((){
           if(selected!=null){
-            if(selected == 3){
-              if(file==null){
-                Fluttertoast.showToast(msg: "Mohon menambahkan bukti pembayaran anda terlebih dahulu");
-              }else{
-                model.addProfOfPayment(widget.order.id, selected, file).whenComplete(() {
-                  if(model.order!=null){
-                    Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: model.order,)));
-                  }
-                });
-              }
+            if(file==null && selected.id == 3){
+              Fluttertoast.showToast(msg: "Mohon menambahkan bukti pembayaran anda terlebih dahulu");
             }else{
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: widget.order,)));
+              model.addProfOfPayment(widget.order.id.toString(), selected.id.toString(), file: file).whenComplete(() {
+                if(model.order!=null){
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: model.order,)));
+                }
+              });
             }
           }else{
             Fluttertoast.showToast(msg: "Mohon memilih metode pembayaran terlebih dahulu");
@@ -145,7 +141,7 @@ class _ProofPaymentState extends State<ProofPaymentPage>{
 
   getImage()async{
     final _piker = ImagePicker();
-    final response =  await _piker.getImage(source: ImageSource.gallery,imageQuality: 50);
+    final response =  await _piker.getImage(source: ImageSource.gallery,imageQuality: 20);
     if(response!=null)
       setState(() {
         file = File(response.path);
