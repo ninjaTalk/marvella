@@ -13,7 +13,8 @@ import 'package:marvella/view_model/order_view_model.dart';
 
 class ProofPaymentPage extends StatefulWidget{
   Order order;
-  ProofPaymentPage({this.order});
+  int backType;
+  ProofPaymentPage({this.order, this.backType});
   @override
   _ProofPaymentState createState() => _ProofPaymentState();
 
@@ -91,14 +92,14 @@ class _ProofPaymentState extends State<ProofPaymentPage>{
               )
           ),
         ),
-        floatingActionButton: model.state == ViewLoad.Busy ? CircularProgressIndicator() : Helper.of(context).nextButton((){
+        floatingActionButton: model.load == ViewLoad.Busy ? CircularProgressIndicator() : Helper.of(context).nextButton((){
           if(selected!=null){
             if(file==null && selected.id == 3){
               Fluttertoast.showToast(msg: "Mohon menambahkan bukti pembayaran anda terlebih dahulu");
             }else{
               model.addProfOfPayment(widget.order.id.toString(), selected.id.toString(), file: file).whenComplete(() {
                 if(model.order!=null){
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: model.order,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: model.order,typeBack: widget.backType,)));
                 }
               });
             }

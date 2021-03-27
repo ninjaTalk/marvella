@@ -12,7 +12,7 @@ class ItemTransaction extends StatelessWidget{
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: order,)));
+        Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: order,typeBack: 1,)));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -32,16 +32,16 @@ class ItemTransaction extends StatelessWidget{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Container(
-            //   margin: EdgeInsets.only(bottom: 12),
-            //   child: Helper.of(context).simpleText(txt: "${order.id}", fontweight: FontWeight.w700, fontSize: 18.0),
-            // ),
+            Container(
+              margin: EdgeInsets.only(bottom: 12),
+              child: Helper.of(context).simpleText(txt: "${order.id}", fontweight: FontWeight.w700, fontSize: 18.0),
+            ),
             Helper.of(context).simpleText(txt: "${user.user.value.nama}", fontSize: 15.0, ),
-            order.detailPesanan[0].keteranganTambahan!=null?Helper.of(context).simpleText(txt: "${order.detailPesanan[0].jenisDesain} ${order.detailPesanan[0].ukuran} "
-                "${order.detailPesanan[0].keteranganTambahan.length>30 ? order.detailPesanan[0].keteranganTambahan.substring(0,30) + "..." : order.detailPesanan[0].keteranganTambahan}", fontSize: 15.0, ) :
-            Container(),
+            order.detailPesanan.isNotEmpty ? order.detailPesanan.first.keteranganTambahan!=null? Helper.of(context).simpleText(txt: "${order.detailPesanan.first.jenisDesain} ${order.detailPesanan.first.ukuran} "
+                "${order.detailPesanan.first.keteranganTambahan.length>30 ? order.detailPesanan[0].keteranganTambahan.substring(0,30) + "..." : order.detailPesanan.first.keteranganTambahan}", fontSize: 15.0, ) :
+            Container() : Container(),
             Helper.of(context).simpleText(txt: "${order.tanggalPemesanan}", fontSize: 15.0,),
-            Helper.of(context).simpleText(txt: "${order.totalHarga} - ${order.id}", fontSize: 15.0, ),
+            Helper.of(context).simpleText(txt: "${order.totalHarga} ${order.jenisPembayaran!="-" ? "- " + order.jenisPembayaran :""}", fontSize: 15.0, ),
 
             Container(
               margin: EdgeInsets.only(top: 12),

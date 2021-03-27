@@ -170,7 +170,7 @@ class _OrderState extends State<OrderPage>{
             ),
           ),
         ),
-        floatingActionButton: model.state == ViewLoad.Busy ? CircularProgressIndicator() : Helper.of(context).nextButton((){
+        floatingActionButton: model.load == ViewLoad.Busy ? CircularProgressIndicator() : Helper.of(context).nextButton((){
           validate((){
             widget.dataSend['id_desain'] = selectedDesign.idDesain.toString();
             widget.dataSend['keterangan'] = _description.value.text;
@@ -180,7 +180,7 @@ class _OrderState extends State<OrderPage>{
             log(json.encode(widget.dataSend).toString());
             model.addOrder(fileDesign, widget.dataSend).whenComplete(() {
               if(model.addSuccess){
-                Navigator.push(context, MaterialPageRoute(builder: (_)=>ProofPaymentPage(order: model.order,)));
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>ProofPaymentPage(order: model.order,backType: 2,)));
               }
             });
           });

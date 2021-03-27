@@ -5,14 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marvella/models/index.dart';
 import 'package:marvella/page/home.dart';
+import 'package:marvella/page/proof_payment_page.dart';
 import 'package:marvella/services/base_view.dart';
 import 'package:marvella/services/helper.dart';
 import 'package:marvella/services/view_state.dart';
 import 'package:marvella/view_model/order_view_model.dart';
 
 class PreviewOrderPage extends StatefulWidget{
+  int typeBack;
   Order order;
-  PreviewOrderPage({this.order});
+  PreviewOrderPage({this.order, this.typeBack});
   @override
   _PreviewOrderState createState() => _PreviewOrderState();
 
@@ -137,14 +139,30 @@ class _PreviewOrderState extends State<PreviewOrderPage>{
           ),
           floatingActionButton: RaisedButton(
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+              if(model.order.idJenisPembayaran == 1){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>ProofPaymentPage(order: model.order,)));
+              }else{
+                if(widget.typeBack == 1){
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }else if(widget.typeBack == 2){
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }else{
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
+              }
             },
-            color: Color(0xFF22CED5),
+            color: (model?.order?.idJenisPembayaran??0) == 1 ? Colors.redAccent : Color(0xFF22CED5),
             padding: EdgeInsets.symmetric(horizontal: 24),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))
             ),
-            child: Helper.of(context).simpleText(txt: "Kembali Ke Beranda",
+            child: Helper.of(context).simpleText(txt: (model?.order?.idJenisPembayaran??0) == 1 ? "Bayar Pesanan" : "Kembali Ke Home",
                 color: Colors.white,
                 fontweight: FontWeight.w700,
                 fontSize: 15.0),

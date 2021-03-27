@@ -162,46 +162,50 @@ class _HomeState extends State<HomePage>{
   Widget build(BuildContext context) {
     return BaseView<UserViewModel>(
       onModelReady: (model)async{
+        model.context = context;
         await model.getUser();
       },
       builder: (context, model, child){
-        return Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(70.0),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              title: ListTile(
-                // tileColor: Colors.blue,
-                contentPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(90),
-                  child: Image.asset("assets/main/user.png"),
+        return WillPopScope(
+          onWillPop: Helper.of(context).onWillPop,
+          child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(70.0),
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                title: ListTile(
+                  // tileColor: Colors.blue,
+                  contentPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(90),
+                    child: Image.asset("assets/main/user.png"),
+                  ),
+                  title: Helper.of(context).simpleText(txt: "${model?.user?.nama??user.user.value.nama}",fontweight: FontWeight.w700, fontSize: 16.0),
+                  subtitle: Helper.of(context).simpleText(txt: "${model?.user?.email??user.user.value.email}", fontSize: 12.0),
                 ),
-                title: Helper.of(context).simpleText(txt: "${model?.user?.nama??user.user.value.nama}",fontweight: FontWeight.w700, fontSize: 16.0),
-                subtitle: Helper.of(context).simpleText(txt: "${model?.user?.email??user.user.value.email}", fontSize: 12.0),
-              ),
-              backgroundColor: Colors.white,
-              elevation: 4.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16)
-                  )
+                backgroundColor: Colors.white,
+                elevation: 4.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(16),
+                        bottomRight: Radius.circular(16)
+                    )
+                ),
               ),
             ),
-          ),
-          extendBody: true,
-          body: model.state == ViewState.Busy ? Center(child: CircularProgressIndicator(),) : RefreshIndicator(
-            onRefresh: ()=>model.getUser(),
-            child: ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              itemCount: _listMenu.length,
-              itemBuilder: (BuildContext context, int index){
-                return Padding(padding: EdgeInsets.symmetric(vertical: 16),
-                  child: menuItem(_listMenu.elementAt(index)),
-                );
-              },
+            extendBody: true,
+            body: model.state == ViewState.Busy ? Center(child: CircularProgressIndicator(),) : RefreshIndicator(
+              onRefresh: ()=>model.getUser(),
+              child: ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                itemCount: _listMenu.length,
+                itemBuilder: (BuildContext context, int index){
+                  return Padding(padding: EdgeInsets.symmetric(vertical: 16),
+                    child: menuItem(_listMenu.elementAt(index)),
+                  );
+                },
+              ),
             ),
           ),
         );

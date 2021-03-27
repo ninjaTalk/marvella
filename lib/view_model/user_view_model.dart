@@ -92,8 +92,7 @@ class UserViewModel extends BaseViewModel{
         Fluttertoast.showToast(msg: "${user.message}");
       }
     }catch(e){
-      Fluttertoast.showToast(msg: "Terjadi Kesalahan ");
-      await userRepository.removeUser().whenComplete(() {
+      await userRepository.removeUser().then((v) {
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>SignIn()), (route) => false);
       });
     }

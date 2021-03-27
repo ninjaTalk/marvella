@@ -32,13 +32,13 @@ class _SplashScreen extends State<SplashScreen>{
               print(user.token.value);
               print(user.user.value.email);
               if(user.token.value!=""){
-                Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>HomePage()), (route) => false);
               }else{
-                Navigator.push(context, MaterialPageRoute(builder: (_)=>SignIn()));
+                Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (_)=>SignIn()), (route) => false);
               }
             });
           }catch(e){
-            Navigator.push(context, MaterialPageRoute(builder: (_)=>SignIn()));
+            Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (_)=>SignIn()), (route) => false);
           }
 
         });
