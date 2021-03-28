@@ -34,7 +34,7 @@ class ItemTransaction extends StatelessWidget{
           children: [
             Container(
               margin: EdgeInsets.only(bottom: 12),
-              child: Helper.of(context).simpleText(txt: "${order.id}", fontweight: FontWeight.w700, fontSize: 18.0),
+              child: Helper.of(context).simpleText(txt: "${order.kodePesanan}", fontweight: FontWeight.w700, fontSize: 18.0),
             ),
             Helper.of(context).simpleText(txt: "${user.user.value.nama}", fontSize: 15.0, ),
             order.detailPesanan.isNotEmpty ? order.detailPesanan.first.keteranganTambahan!=null? Helper.of(context).simpleText(txt: "${order.detailPesanan.first.jenisDesain} ${order.detailPesanan.first.ukuran} "

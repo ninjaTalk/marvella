@@ -8,6 +8,7 @@ class Order {
       Order();
 
   int id;
+  @JsonKey(name: 'kode_pesanan') String kodePesanan;
   @JsonKey(name: 'id_pemesan') int idPemesan;
   @JsonKey(name: 'tanggal_pemesanan') String tanggalPemesanan;
   @JsonKey(name: 'total_harga') String totalHarga;

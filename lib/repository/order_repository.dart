@@ -124,7 +124,20 @@ class OrderRepository{
     return PaymentsMethodResponse.fromJson(json.decode(response.body));
   }
 
+  Future<OrderResponse> cancelOrder(id)async{
+    String url = "${GlobalConfiguration().get('endpoint')}/v1/users/${user.value.id}/pesanan/${id}/cancel";
 
+    print(url);
+
+    final client = new Client();
+
+    var response = await client.delete(url,headers: Helper.getHeader(is_json: true));
+
+    log("DELETE ORDER");
+    print(response.body);
+
+    return OrderResponse.fromJson(json.decode(response.body));
+  }
 
 
 }

@@ -17,11 +17,14 @@ class Helper{
 
   Helper({this.context});
 
-  static getHeader(){
+  static getHeader({is_json: false}){
     Map<String, String> header = new Map<String, String>();
     header = {
       "Authorization" : "Bearer ${user.token.value}",
     };
+    if (is_json) {
+      header['Content-Type'] = "application/json";
+    }
     return header;
   }
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marvella/element/full_image.dart';
 import 'package:marvella/models/index.dart';
 import 'package:marvella/page/home.dart';
 import 'package:marvella/page/proof_payment_page.dart';
@@ -118,17 +119,23 @@ class _PreviewOrderState extends State<PreviewOrderPage>{
                     child: Helper.of(context).simpleText(txt: "Desain Anda", fontSize: 14.0),
                   ),
 
-                  Container(
-                    padding: EdgeInsets.all(24),
-                    child:  ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                      child: CachedNetworkImage(
-                        imageUrl: model.order.detailPesanan[0].file,
-                        height: 160,width: 240,
-                        progressIndicatorBuilder: (context, value, download){
-                          return LinearProgressIndicator(value: download.progress,);
-                        },
-                        errorWidget: (context,_,error)=>Image.asset("assets/main/image.png"),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=>ImageFullNetwork(url: model.order.detailPesanan[0].file,)));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(24),
+                      child:  ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                        child: CachedNetworkImage(
+                          imageUrl: model.order.detailPesanan[0].file,
+                          height: 160,width: 240,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, value, download){
+                            return LinearProgressIndicator(value: download.progress,);
+                          },
+                          errorWidget: (context,_,error)=>Image.asset("assets/main/image.png"),
+                        ),
                       ),
                     ),
                   )
@@ -137,24 +144,15 @@ class _PreviewOrderState extends State<PreviewOrderPage>{
               ),
             ),
           ),
-          floatingActionButton: RaisedButton(
+          floatingActionButton: widget.typeBack == 2 || ((model?.order?.idJenisPembayaran??0) == 1 && model?.order?.idStatusPesanan !=4) ? RaisedButton(
             onPressed: (){
               if(model.order.idJenisPembayaran == 1){
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>ProofPaymentPage(order: model.order,)));
               }else{
-                if(widget.typeBack == 1){
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }else if(widget.typeBack == 2){
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }else{
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
               }
             },
             color: (model?.order?.idJenisPembayaran??0) == 1 ? Colors.redAccent : Color(0xFF22CED5),
@@ -166,7 +164,7 @@ class _PreviewOrderState extends State<PreviewOrderPage>{
                 color: Colors.white,
                 fontweight: FontWeight.w700,
                 fontSize: 15.0),
-          )
+          ) : Container()
       ),
     );
   }

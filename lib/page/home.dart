@@ -5,6 +5,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:marvella/models/index.dart';
+import 'package:marvella/page/preview_order_page.dart';
 import 'package:marvella/page/sign_in.dart';
 import 'package:marvella/repository/user_repository.dart';
 import 'package:marvella/services/base_view.dart';
@@ -60,7 +62,11 @@ class _HomeState extends State<HomePage>{
     print("NAVIGATE");
 
     if(dataInfo.containsKey('id')) {
-
+      if(dataInfo['id']!=null || dataInfo['id']!=""){
+        Order order = new Order();
+        order.id = int.parse(dataInfo['id']);
+        Navigator.push(context, MaterialPageRoute(builder: (_)=>PreviewOrderPage(order: order)));
+      }
     }
   }
 

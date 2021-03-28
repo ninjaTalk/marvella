@@ -112,8 +112,6 @@ class _SignIn extends State<SignIn>{
               password = input;
             });
           }
-
-          print(email);
         },
         obscureText: type == 1 ? onHide : false,
         decoration: InputDecoration(
@@ -138,7 +136,9 @@ class _SignIn extends State<SignIn>{
   }
 
   Widget loginBtn(UserViewModel model){
-    return FlatButton(
+    return model.state == ViewState.Busy ? Center(child: CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+    ),) : FlatButton(
       onPressed: (){
         if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email??"")){
           Fluttertoast.showToast(msg: "Mohon Memasukkan Email yang Valid");

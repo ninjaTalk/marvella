@@ -1,5 +1,6 @@
 {
   "id": 1,
+  "kode_pesanan" : "sass",
   "id_pemesan": 2,
   "tanggal_pemesanan": "Sabtu, 6 Maret 2021",
   "total_harga": "Rp. 30.000",

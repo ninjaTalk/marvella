@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:marvella/services/base_view.dart';
+import 'package:marvella/services/view_state.dart';
 import 'package:marvella/view_model/user_view_model.dart';
 import '../services/helper.dart';
 
@@ -158,6 +159,8 @@ class _SignUpState extends State<SignUpPage>{
             hintStyle: TextStyle(
                 color: Colors.white
             ),
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
             border: InputBorder.none
         ),
       ),
@@ -253,13 +256,10 @@ class _SignUpState extends State<SignUpPage>{
   }
 
   Widget loginBtn(UserViewModel model){
-    return FlatButton(
+    return model.state == ViewState.Busy ? Center(child: CircularProgressIndicator(
+      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+    ),) : FlatButton(
       onPressed: ()async{
-        // if(!onClick){
-        //   setState(() {
-        //     onClick = true;
-        //   });
-        //   print(email);
         if(key.currentState.validate()){
           if(gender!=null){
             log("validate");
@@ -275,18 +275,7 @@ class _SignUpState extends State<SignUpPage>{
               onClick = false;
             });
           }
-
         }
-
-
-          // }else{
-          //   Fluttertoast.showToast(msg: "Mohon Memilih Jenis Kelamin");
-          // }
-          //
-          // setState(() {
-          //   onClick = false;
-          // });
-        // }
       },
       child: Helper().simpleText(color: Color(0xFF2D76D5), txt: "Daftar", fontweight: FontWeight.w700,fontSize: 16.0),
       padding: EdgeInsets.symmetric(vertical: 16),

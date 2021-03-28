@@ -182,18 +182,17 @@ class UserRepository{
     return LogoutResponse.fromJson(json.decode(response.body));
   }
 
-  Future setDevice(id) async {
+  Future setDevice(id, token) async {
     String url = "${GlobalConfiguration().get('endpoint')}/v1/setDeviceID?id=$id";
 
     print(url);
 
-    var response = await client.patch(url, headers: Helper.getHeader());
+    var response = await client.post(url, headers: {
+      "Authorization" : "Bearer $token"
+    });
 
-    if(response.statusCode == 200){
-      removeUser();
-    }
     print(json.encode(Helper.getHeader()));
-    log("Logout RESPONSE");
+    log("SET DEVICE RESPONSE");
     log(response.body);
 
     // return LogoutResponse.fromJson(json.decode(response.body));

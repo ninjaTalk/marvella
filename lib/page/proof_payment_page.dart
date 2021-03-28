@@ -40,6 +40,7 @@ class _ProofPaymentState extends State<ProofPaymentPage>{
             setState(() {
               selected =null;
             });
+            model.setLoad(ViewLoad.Idle);
             return model.getPayment();
           },
           child: SingleChildScrollView(
@@ -87,7 +88,66 @@ class _ProofPaymentState extends State<ProofPaymentPage>{
                         height: 200,width: double.infinity,
                         child: file!=null ? Image.file(file,fit: BoxFit.scaleDown,) : Image.asset("assets/main/image.png"),
                       )
-                  ) : Container()
+                  ) : Container(),
+                 SizedBox(height: 40,),
+                 Align(
+                   alignment: Alignment.centerRight,
+                   child: model.load == ViewLoad.Busy ? CircularProgressIndicator() : FlatButton(
+                     shape: RoundedRectangleBorder(
+                         borderRadius: BorderRadius.all(Radius.circular(8))
+                     ),
+                     color: Colors.redAccent.shade200.withOpacity(0.1),
+                     padding: EdgeInsets.all(12),
+                     onPressed: ()async{
+                       showDialog(
+                        context: context,
+                        builder: (context){
+                          return AlertDialog(
+                            shape:  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16))
+                            ),
+                            title: Helper.of(context).simpleText(txt: "Peringatan",
+                              fontSize: 16.0
+                            ),
+                            content: Helper.of(context).simpleText(
+                              txt: "Apakah anda yakin ingin membatalkan pesanan ini ?"
+                            ),
+                            actions: [
+                             Expanded(
+                               child:  FlatButton(
+                                 onPressed: (){
+                                   Navigator.pop(context);
+                                 },
+                                 child: Helper.of(context).simpleText(txt: "Kembali",color: Colors.white),
+                                 color: Colors.blueAccent,
+                                 shape: RoundedRectangleBorder(
+                                     borderRadius: BorderRadius.all(Radius.circular(8))
+                                 ),
+                               ),
+                             ),
+
+                              FlatButton(
+                                onPressed: ()async{
+                                  Navigator.pop(context);
+                                  await model.cancelOrder(widget.order.id, context);
+                                },
+                                child: Helper.of(context).simpleText(txt: "Batalkan Pesanan",color: Colors.white),
+                                color: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(8))
+                                ),
+                              ),
+
+                            ],
+                          );
+                        }
+                       );
+                     },
+                     child: Helper.of(context).simpleText(txt: "Batalkan Pesanan",
+                         color: Colors.redAccent.withOpacity(0.8)
+                     ),
+                   ),
+                 )
                 ],
               )
           ),

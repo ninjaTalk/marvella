@@ -32,11 +32,13 @@ class _NotificationState extends State<NotificationPage>{
           onRefresh: (){
             return model.getAllNotification();;
           },
-          child: ListView.builder(
+          child: model.listNotification.length>0 ? ListView.builder(
             itemCount: model.listNotification.length,
             itemBuilder: (BuildContext context, int index){
               return ItemNotifiacation(notifications: model.listNotification.elementAt(index),);
             },
+          ) : Center(
+            child: Helper.of(context).simpleText(txt: "Belum ada notifikasi"),
           ),
         ),
       ),

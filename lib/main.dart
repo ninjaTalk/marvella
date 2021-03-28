@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Marvella',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'ProductSans',
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

@@ -38,7 +38,7 @@ class UserViewModel extends BaseViewModel{
     try{
       UserResponse user = await userRepository.login(email, password,device_id: deviceId);
       if(user.code == 200){
-        setDeviceId(deviceId).whenComplete(() {
+        setDeviceId(deviceId, user.token).whenComplete(() {
           Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
         });
       }else{
@@ -64,8 +64,9 @@ class UserViewModel extends BaseViewModel{
     try{
       UserResponse user = await userRepository.register(dataSend);
       if(user.success){
-        setDeviceId(deviceId);
-        // Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+        setDeviceId(deviceId,user.token).whenComplete(() {
+          Navigator.push(context, MaterialPageRoute(builder: (_)=>HomePage()));
+        });
       }else{
         Fluttertoast.showToast(msg: "${user.message}");
       }
@@ -76,9 +77,10 @@ class UserViewModel extends BaseViewModel{
     setState(ViewState.Idle);
   }
 
-  Future<void> setDeviceId(id) async {
+  Future<void> setDeviceId(id, token) async {
     setOption(ViewOption.Busy);
-    await userRepository.setDevice(id);
+    print("set Device");
+    await userRepository.setDevice(id, token);
     setOption(ViewOption.Idle);
   }
 
@@ -92,6 +94,7 @@ class UserViewModel extends BaseViewModel{
         Fluttertoast.showToast(msg: "${user.message}");
       }
     }catch(e){
+      Fluttertoast.showToast(msg: "Akses ditolak, Mohon melakukan proses login kembali");
       await userRepository.removeUser().then((v) {
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_)=>SignIn()), (route) => false);
       });

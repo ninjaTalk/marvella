@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:marvella/models/index.dart';
 import 'package:marvella/repository/order_repository.dart';
@@ -104,5 +105,21 @@ class OrderViewModel extends BaseViewModel{
     }
 
     setLoad(ViewLoad.Idle);
+  }
+
+  Future<void> cancelOrder(id, BuildContext context)async{
+    setLoad(ViewLoad.Busy);
+
+    try{
+      OrderResponse response = await orderRepository.cancelOrder(id);
+      if(response.code == 200){
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
+    }catch(e){
+      Fluttertoast.showToast(msg: "Terjadi Kesalahan Mohon Coba Lagi");
+    }
+
+    setLoad(ViewLoad.Busy);
   }
 }
